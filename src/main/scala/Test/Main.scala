@@ -21,7 +21,7 @@ object Main extends App {
   val request = HttpRequest(
     method = HttpMethods.POST,
     uri = s"$port/$index/_search?pretty=true",
-    entity = HttpEntity(ContentTypes.`application/json`, "{ \"query\": { \"match_al\" : {} } }")
+    entity = HttpEntity(ContentTypes.`application/json`, "{ \"query\": { \"match_all\" : {} } }")
   )
 
   val responseFuture: Future[HttpResponse] = Http().singleRequest(request)
@@ -30,7 +30,7 @@ object Main extends App {
       case Success(res) => {
         println(res+"\n")
         res.entity.dataBytes.runFold(ByteString(""))(_ ++ _).foreach { body =>
-          println("Got response, body: " + body.utf8String)}
+          println("Got response, body: \n" + body.utf8String)}
       }
       case Failure(_) => sys.error("something wrong")
     }
