@@ -1,10 +1,9 @@
 package Test.TransformApi.CreateTransforms.PivotParts
 
-case class Aggregations(avg: Option[String],
-                        filter: Option[String],
-                        max: Option[String],
-                        min: Option[String],
-                        sum: Option[String]) {
-
-
-}
+case class Aggregations(srcIndex: String,
+                        dstIndex: String,
+                        avg: Option[String] = None,
+                        filter: Option[String] = None,
+                        max: Option[String] = None,
+                        min: Option[String] = None,
+                        sum: Option[String] = None)
