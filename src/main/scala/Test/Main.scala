@@ -4,7 +4,8 @@ object Main extends App {
 
   //Elasticsearch().getAllDocumentsFromIndex("kibana_sample_data_flights")
 
-
+  Transform().createTransform("transform1")
+  Transform().startTransform("transform1")
 
  //Transform().postTransform()
  // Transform().putTransform("transform1")
@@ -12,7 +13,7 @@ object Main extends App {
  // Transform().stopTransform("transform1")
  // Transform().deleteTransform("transform1")
  // Transform().getTransform("transform1")
-  Transform().getTransformStatistics("transform1")
+ // Transform().getTransformStatistics("transform1")
 
 //  Rollup().putRollUpJob("rollup1")
 //  Rollup().startRollupJob("rollup1")

@@ -14,7 +14,7 @@ case class Transform() {
     Elasticsearch().getResponseFromRequest(request)
   }
 
-  def putTransform(index: String): Unit = {
+  def createTransform(index: String): Unit = {
     val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.PUT,
