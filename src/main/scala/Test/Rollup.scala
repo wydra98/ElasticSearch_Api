@@ -68,7 +68,7 @@ case class Rollup() {
     Elasticsearch().getResponseFromRequest(request)
   }
 
-  def getFromRollup(index: String, query: String) {
+  def searchRollupData(index: String, query: String) {
     val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.GET,

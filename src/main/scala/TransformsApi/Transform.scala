@@ -1,31 +1,48 @@
-package Test
+package TransformsApi
 
+import Test.Elasticsearch
+import TransformsApi.TransformConfigs.TransformConfig
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpMethods, HttpRequest}
+import io.circe.generic.auto._
+import io.circe.syntax._
 
 case class Transform() {
 
-  def postTransform(): Unit = {
-    val port = "http://localhost:9200"
+  val port = "http://localhost:9200"
+
+  def postTransform(transformConfig: TransformConfig): Unit = {
+    val json = transformConfig
+      .asJson
+      .dropNullValues
+      .mapObject(_.mapValues(_.dropNullValues))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .noSpaces
     val request = HttpRequest(
       method = HttpMethods.POST,
       uri = s"$port/_transform/_preview?pretty",
-      entity = HttpEntity(ContentTypes.`application/json`, TransformRequestBody().transformEntity1)
+      entity = HttpEntity(ContentTypes.`application/json`, json)
     )
     Elasticsearch().getResponseFromRequest(request)
   }
 
-  def putTransform(index: String): Unit = {
-    val port = "http://localhost:9200"
+  def putTransform(transformConfig: TransformConfig): Unit = {
+    val json = transformConfig
+      .asJson
+      .dropNullValues
+      .mapObject(_.mapValues(_.dropNullValues))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .noSpaces
     val request = HttpRequest(
       method = HttpMethods.PUT,
-      uri = s"$port/_transform/$index",
-      entity = HttpEntity(ContentTypes.`application/json`, TransformRequestBody().transformEntity1)
+      uri = s"$port/_transform/${transformConfig.id}",
+      entity = HttpEntity(ContentTypes.`application/json`, json)
     )
     Elasticsearch().getResponseFromRequest(request)
   }
 
   def startTransform(index: String) {
-    val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.POST,
       uri = s"$port/_transform/$index/_start"
@@ -34,7 +51,6 @@ case class Transform() {
   }
 
   def stopTransform(index: String) {
-    val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.POST,
       uri = s"$port/_transform/$index/_stop"
@@ -43,7 +59,6 @@ case class Transform() {
   }
 
   def deleteTransform(index: String) {
-    val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.DELETE,
       uri = s"$port/_transform/$index"
@@ -52,7 +67,6 @@ case class Transform() {
   }
 
   def getTransform(index: String) {
-    val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.GET,
       uri = s"$port/_transform/$index?pretty"
@@ -61,7 +75,6 @@ case class Transform() {
   }
 
   def getTransformStatistics(index: String) {
-    val port = "http://localhost:9200"
     val request = HttpRequest(
       method = HttpMethods.GET,
       uri = s"$port/_transform/$index/_stats?pretty"

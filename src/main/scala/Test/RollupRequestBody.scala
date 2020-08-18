@@ -6,7 +6,7 @@ case class RollupRequestBody() {
   def rollupEntity1: String = {
     """ {
       "index_pattern": "kibana_sample_data_*",
-      "rollup_index": "sensor_rollup",
+      "rollup_index": "kibana_sample_data_",
       "cron": "*/30 * * * * ?",
       "page_size": 1000,
       "groups": {

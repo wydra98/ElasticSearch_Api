@@ -2,9 +2,10 @@ package Test
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpMethods, HttpRequest, HttpResponse}
+import akka.http.scaladsl.model._
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
+
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
@@ -19,7 +20,7 @@ case class Elasticsearch() {
     responseFuture
       .onComplete {
         case Success(res) => {
-          //println(res + "\n")
+          println("\n"+ res + "\n")
           res.entity.dataBytes.runFold(ByteString(""))(_ ++ _).foreach { body =>
             println("Got response, body: \n" + body.utf8String)
           }
@@ -34,6 +35,15 @@ case class Elasticsearch() {
       method = HttpMethods.GET,
       uri = s"$port/$index/_search?pretty=true",
       entity = HttpEntity(ContentTypes.`application/json`, "{ \"query\": { \"match_all\" : {} } }")
+    )
+    getResponseFromRequest(request)
+  }
+
+  def deleteIndex(index: String) {
+    val port = "http://localhost:9200"
+    val request = HttpRequest(
+      method = HttpMethods.DELETE,
+      uri = s"$port/$index?pretty=true",
     )
     getResponseFromRequest(request)
   }
