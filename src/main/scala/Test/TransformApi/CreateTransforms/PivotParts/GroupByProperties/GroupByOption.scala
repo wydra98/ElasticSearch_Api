@@ -1,3 +1,5 @@
 package Test.TransformApi.CreateTransforms.PivotParts.GroupByProperties
 
-case class Terms() extends GroupByOption
+trait GroupByOption {
+
+}

@@ -48,7 +48,7 @@ case class CreateTransform(id: String,
     jsonBody += printer.print(dest.asJson)
     jsonBody += ","
     jsonBody += "\"pivot\":"
-    jsonBody += printer.print(pivot.asJson)
+    jsonBody += pivot.groupBy.parseToJson()
     jsonBody += ","
     if(description.isDefined){
       jsonBody += "\"description\":"
