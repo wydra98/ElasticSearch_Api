@@ -3,7 +3,7 @@ import RollupsApi.Groups.DateHistogram.DateHistogram
 import RollupsApi.Groups.Groups
 import RollupsApi.Groups.Terms.Terms
 import RollupsApi.Metrics.Metrics
-import RollupsApi.RollupConfig
+import RollupsApi.{RollupApi, RollupConfig}
 
 
 object MainRollup extends App {
@@ -23,7 +23,7 @@ object MainRollup extends App {
   )
 
   /** 1. Tworzenie rollup-u */
-  //RollupApi().putRollUpJob(rollupConfig, id, port)
+//  RollupApi().putRollUpJob(rollupConfig, id, port)
 
   /** 2. Startowanie rollup-u */
   //RollupApi().startRollupJob(id, port)
@@ -32,7 +32,8 @@ object MainRollup extends App {
   //RollupApi().stopRollupJob(id, port)
 
   /** 4. Usunięcie rollup-u */
-  //RollupApi().deleteRollupJob(id, port)
+//  RollupApi().deleteRollupJob(id, port)
+//  Elasticsearch().deleteIndex("rollup1_index")
 
   /** 5. Szczegóły rollup-u  */
   //RollupApi().getRollupJobDetails(id, port)
@@ -40,7 +41,10 @@ object MainRollup extends App {
   /** 6. Informacje o możliwościach indexu */
   //RollupApi().getRollupIndexCapabilities("rollup1_index", port)
 
-//  /** 7. Informacje o danych rollup-u */
+  /** 7. Informacje o danych rollup-u */
 //  //RollupApi().searchRollupData("rollup1_index", RollupRequestBody().rollupSearch1)
+
+  val temp = RollupApi
+  val temp1 = Elasticsearch
 
 }
