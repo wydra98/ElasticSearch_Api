@@ -1,6 +1,6 @@
 
 import rollupsApi.RollupApi
-import rollupsApi.rollupsProperties.{DateHistogram, Groups, Metrics, Terms}
+import rollupsApi.rollupsProperties._
 
 
 object MainRollup extends App {
@@ -11,7 +11,8 @@ object MainRollup extends App {
   val rollupConfig = rollupsApi.RollupConfig(
     index_pattern = "kibana_sample_data_*",
     rollup_index = "rollup1_index",
-    cron = "*/30 * * * * ?",
+
+    cron = "",// Cron().parseFromData(seconds = 2),
     page_size = 1000L,
     groups = Groups(date_histogram = Some(DateHistogram("timestamp", "60m")),
                     terms = Some(Terms(List("DistanceKilometers", "AvgTicketPrice")))),
