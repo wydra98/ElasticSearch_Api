@@ -1,13 +1,7 @@
-import TransformsApi.Dest.Dest
-import TransformsApi.Pivot.Aggregations.Aggregations
-import TransformsApi.Pivot.Aggregations.Parts.{Sum, ValueCount}
-import TransformsApi.Pivot.GroupBy.GroupBy
-import TransformsApi.Pivot.GroupBy.Parts.Terms
-import TransformsApi.Pivot.Pivot
-import TransformsApi.Source.Source
-import TransformsApi.Sync.Sync
-import TransformsApi.Sync.Time.Time
-import TransformsApi.{TransformApi, TransformConfig, TransformUpdateConfig}
+import transformsApi.transformsProperties.pivotProperties.{Aggregations, GroupBy, Sum, Terms, ValueCount}
+import transformsApi.transformsProperties.syncProperties.Time
+import transformsApi.transformsProperties.{Dest, Pivot, Source, Sync}
+import transformsApi.{TransformApi, TransformConfig, TransformUpdateConfig}
 
 object MainTransform extends App {
 
@@ -28,17 +22,17 @@ object MainTransform extends App {
     source = Source("kibana_sample_data_flights",Some(exampleQuery)),
     dest = Dest("transform_1"),
     pivot =  Pivot(
-      Map("carrier" -> GroupBy(Some(Terms("OriginCityName")))),
+      Map("carrier" -> GroupBy(terms = Some(Terms("OriginCityName")))),
       Map("flights_count" -> Aggregations(value_count = Some(ValueCount("FlightNum"))),
         "delay_mins_total" -> Aggregations(sum = Some(Sum("FlightDelayMin"))),
         "flight_mins_total" -> Aggregations(sum = Some(Sum("FlightTimeMin")))
       )),
     frequency = Some("5m"),
-    sync = (Some(Sync(Time("timestamp", Some("60s")))))
+    sync = Some(Sync(Time("timestamp", Some("60s"))))
   )
 
   val transformUpdateConfig = TransformUpdateConfig(
-    source = Source("kibana_sample_data_flights", Some(exampleQuery)),
+    source = Source("kibana_sample_data_flights"/*, Some(exampleQuery)*/),
     dest = Dest("transform_1"),
     description = Some("Transform Test"),
     frequency = Some("15m"),
@@ -49,7 +43,7 @@ object MainTransform extends App {
 //  TransformApi().postTransform(transformConfig,port)
 
   /** 2. Tworzenie transformacji */
-//  TransformApi().putTransform(transformConfig,id,port)
+  TransformApi().putTransform(transformConfig,id,port)
 
   /** 2. Update transformacji */
 //  TransformApi().updateTransform(transformUpdateConfig,id,port)
