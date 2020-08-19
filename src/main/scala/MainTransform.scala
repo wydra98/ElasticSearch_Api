@@ -7,37 +7,55 @@ import TransformsApi.Pivot.Pivot
 import TransformsApi.Source.Source
 import TransformsApi.Sync.Sync
 import TransformsApi.Sync.Time.Time
-import TransformsApi.Transform
-import TransformsApi.TransformConfigs.TransformConfig
+import TransformsApi.TransformConfig
 
 object MainTransform extends App {
 
+  val port = "http://localhost:9200"
+  val id = "transform1"
+
   val transformConfig = TransformConfig(
-    id = "transform1",
+    source = Source("kibana_sample_data_flights",Some(exampleQuery)),
     dest = Dest("transform_1"),
-    frequency = "5m",
-  )
-    .withId("transform1")
-    .withSource(Source("kibana_sample_data_flights"))
-    .withDest(Dest("transform_1"))
-    .withPivot(
-      Pivot(
+    pivot =  Pivot(
       Map("carrier" -> GroupBy(Some(Terms("OriginCityName")))),
       Map("flights_count" -> Aggregations(value_count = Some(ValueCount("FlightNum"))),
         "delay_mins_total" -> Aggregations(sum = Some(Sum("FlightDelayMin"))),
         "flight_mins_total" -> Aggregations(sum = Some(Sum("FlightTimeMin")))
-      )))
-    .withFrequency(Some("5m"))
-    .withDescription(Some("TransformTest"))
-    .withSync(Some(Sync(Time("timestamp", Some("60s")))))
-    .build
+      )),
+    frequency = Some("5m"),
+    description = Some("TransformTest"),
+    sync = (Some(Sync(Time("timestamp", Some("60s")))))
+  )
 
+  val exampleQuery: String = {
+    """{
+         "bool": {
+          "filter": [
+              { "term": { "Cancelled": false } }
+          ]
+       }
+      }"""
+  }
 
-    //  Transform().postTransform(transformConfig)
-      Transform().putTransform(transformConfig)
-  //  Transform().startTransform("transform1")
-  //  Transform().stopTransform("transform1")
-  //  Transform().deleteTransform("transform1")
-  //  Transform().getTransform("transform1")
-  //  Transform().getTransformStatistics("transform1")
+  /** 1. Tworzenie transformacji - tylko do podglądu */
+  //TransformApi().postTransform(transformConfig,id,port)
+
+  /** 2. Tworzenie transformacji */
+  //TransformApi().putTransform(transformConfig,id,port)
+
+  /** 3. Startowanie transformacji */
+  //TransformApi().startTransform(id,port)
+
+  /** 4. Zatrzymanie transformacji */
+  //TransformApi().stopTransform(id,port)
+
+  /** 5. Usunięcie transformacji */
+  //TransformApi().deleteTransform(id,port)
+
+  /** 6. Informacje o transformacji */
+  //TransformApi().getTransform(id,port)
+
+  /** 7. Statystyki o transformacji */
+  //TransformApi().getTransformStatistics(id,port)
 }
