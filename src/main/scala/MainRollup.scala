@@ -12,7 +12,7 @@ object MainRollup extends App {
     index_pattern = "kibana_sample_data_*",
     rollup_index = "rollup1_index",
 
-    cron = "567 0 767 * ?",// Cron().parseFromData(seconds = 2),
+    cron = Cron().parseFromData(timeUnit = TimeUnit.seconds,Some(1)),
     page_size = 1000L,
     groups = Groups(date_histogram = Some(DateHistogram("timestamp", "60m")),
                     terms = Some(Terms(List("DistanceKilometers", "AvgTicketPrice")))),
@@ -21,10 +21,10 @@ object MainRollup extends App {
   )
 
   /** 1. Tworzenie rollup-u */
-  //RollupApi().putRollUpJob(rollupConfig, id, port)
+  RollupApi().putRollUpJob(rollupConfig, id, port)
 
   /** 2. Startowanie rollup-u */
-  RollupApi().startRollupJob(id, port)
+  //RollupApi().startRollupJob(id, port)
 
   /** 3. Zatrzymanie rollup-u */
   //RollupApi().stopRollupJob(id, port)

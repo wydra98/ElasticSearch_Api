@@ -17,24 +17,29 @@ import rollupsapi.rollupsproperties.TimeUnit.TimeUnit
 
 object TimeUnit extends Enumeration {
   type TimeUnit = Value
-  val seconds, minutes, hours, month, day = Value
+  val seconds, minutes, hours, day, month, daily, monthly = Value
 }
 
 case class Cron() {
 
-  def parseFromDataWithValue(timeUnit: TimeUnit, value: Int): String = {
+  def parseFromData(timeUnit: TimeUnit,value: Option[Int] = None): String = {
 
-    var dataString = ""
+    var res = ""
+    val x: Int =
+      if(value.isEmpty) 1
+      else value.get
 
     timeUnit match {
-      case TimeUnit.seconds => { dataString = s"*/${value} * * * * ?"; dataString}      //every 1 second, 2 seconds, 4 seconds ... etc.
-      case TimeUnit.minutes => { dataString = s"0 0/${value} * 1/1 * ? *"; dataString}  //every 1 minute, 2 minutes, 4 minutes ... etc.
-      case TimeUnit.hours => { dataString = s"0 0 0/${value} 1/1 * ? *"; dataString}    //every 1 hour, 2 hours, 4 hours ... etc.
-      case TimeUnit.day => { dataString = s"0 0 0 ? * ${value} *"; dataString}          //every Monday or Tuesday or Friday ... etc.
-      case TimeUnit.month => { dataString = s"0 0 0 1 1/${value} ? *"; dataString}      //every January or February or June ... etc.
-      case _ => {dataString = "Not correct value"; dataString}
+      case TimeUnit.seconds => res = s"*/${x} * * * * ?"; res     //every 1 second, 2 seconds, 4 seconds ... etc.
+      case TimeUnit.minutes => res = s"0 0/${x} * 1/1 * ? *"; res //every 1 minute, 2 minutes, 4 minutes ... etc.
+      case TimeUnit.hours => res = s"0 0 0/${x} 1/1 * ? *"; res   //every 1 hour, 2 hours, 4 hours ... etc.
+      case TimeUnit.day => res = s"0 0 0 ? * ${x} *"; res         //every Monday or Tuesday or Friday ... etc.
+      case TimeUnit.month => res = s"0 0 0 1 1/${x} ? *"; res     //every January or February or June ... etc.
+      case TimeUnit.daily => res = s"0 0 0 * * ?"; res            //every day at midnight
+      case TimeUnit.monthly => res = s"0 0 12 1 * ? ? *"; res     //every January or February or June ... etc.
+      case _ => {res = "Not correct value"; res}
 
-      dataString
+      res
     }
   }
 
