@@ -1,7 +1,7 @@
-import transformsApi.transformsProperties.pivotProperties.{Aggregations, GroupBy, Sum, Terms, ValueCount}
-import transformsApi.transformsProperties.syncProperties.Time
-import transformsApi.transformsProperties.{Dest, Pivot, Source, Sync}
-import transformsApi.{TransformApi, TransformConfig, TransformUpdateConfig}
+import transformsapi.transformsproperties.pivotproperties.{Aggregations, GroupBy, Sum, Terms, ValueCount}
+import transformsapi.transformsproperties.syncproperties.Time
+import transformsapi.transformsproperties.{Dest, Pivot, Source, Sync}
+import transformsapi.{TransformApi, TransformConfig, TransformUpdateConfig}
 
 object MainTransform extends App {
 
@@ -43,7 +43,7 @@ object MainTransform extends App {
 //  TransformApi().postTransform(transformConfig,port)
 
   /** 2. Tworzenie transformacji */
-  TransformApi().putTransform(transformConfig,id,port)
+ // TransformApi().putTransform(transformConfig,id,port)
 
   /** 2. Update transformacji */
 //  TransformApi().updateTransform(transformUpdateConfig,id,port)
