@@ -5,27 +5,17 @@ import transformsapi.transformsproperties.syncproperties.Time
 import transformsapi.transformsproperties.{Dest, Pivot, Source, Sync}
 import transformsapi.{TransformApi, TransformConfig, TransformUpdateConfig}
 
+
 object MainTransform extends App {
 
   val port = "http://localhost:9200"
   val id = "transform1"
-
-  val exampleQuery: String = {
-    """{
-         "bool": {
-          "filter": [
-              { "term": { "Cancelled": false } }
-          ]
-       }
-      }"""
-  }
 
   val query = BoolQuery(
     filters = List(TermQuery("Canceled", false))
   )
 
   val transformConfig = TransformConfig("transform1",
-//    source = Source("kibana_sample_data_flights",Some(exampleQuery)),
     source = new Source("kibana_sample_data_flights",query),
     dest = Dest("transform_1"),
     pivot =  Pivot(
@@ -47,13 +37,13 @@ object MainTransform extends App {
   )
 
   /** 1. Tworzenie transformacji - tylko do podglądu */
-//  TransformApi().postTransform(transformConfig,port)
+  TransformApi().postTransform(transformConfig,port)
 
   /** 2. Tworzenie transformacji */
 //  TransformApi().putTransform(transformConfig,id,port)
 
   /** 2. Update transformacji */
-  TransformApi().updateTransform(transformUpdateConfig,id,port)
+//  TransformApi().updateTransform(transformUpdateConfig,id,port)
 
   /** 3. Startowanie transformacji */
 //  TransformApi().startTransform(id,port)
@@ -70,5 +60,4 @@ object MainTransform extends App {
   /** 7. Statystyki o transformacji */
 //  TransformApi().getTransformStatistics(id,port)
 
-  val temp = TransformApi
 }

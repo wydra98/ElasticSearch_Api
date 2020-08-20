@@ -28,17 +28,4 @@ case class Response() {
       }
   }
 
-  def getResponseFromDeleteRequest(request: HttpRequest): Unit = {
-    val responseFuture: Future[HttpResponse] = Http().singleRequest(request)
-    responseFuture
-      .onComplete {
-        case Success(res) => {
-          println("\n" + res + "\n")
-          res.entity.dataBytes.runFold(ByteString(""))(_ ++ _).foreach { body =>
-            println("Got response, body: \n" + body.utf8String)
-          }
-        }
-        case Failure(_) => sys.error("something wrong")
-      }
-  }
 }

@@ -10,6 +10,7 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
 
 
+
 case class Response() {
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -28,6 +29,5 @@ case class Response() {
         case Failure(_) => sys.error("something wrong")
       }
   }
-
 
 }
