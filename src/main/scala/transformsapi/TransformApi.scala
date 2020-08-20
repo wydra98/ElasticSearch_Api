@@ -8,7 +8,13 @@ case class TransformApi() {
 
 
   def postTransform(transformConfig: TransformConfig, port: String): Unit = {
-      val json = prepareJsonToConfig(transformConfig)
+    val json = transformConfig
+      .asJson
+      .dropNullValues
+      .mapObject(_.mapValues(_.dropNullValues))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .noSpaces
       val request = HttpRequest(
         method = HttpMethods.POST,
         uri = s"$port/_transform/_preview?pretty",
@@ -18,7 +24,13 @@ case class TransformApi() {
   }
 
   def putTransform(transformConfig: TransformConfig, index: String, port: String): Unit = {
-    val json = prepareJsonToConfig(transformConfig)
+    val json = transformConfig
+      .asJson
+      .dropNullValues
+      .mapObject(_.mapValues(_.dropNullValues))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .noSpaces
     val request = HttpRequest(
       method = HttpMethods.PUT,
       uri = s"$port/_transform/$index",
@@ -28,7 +40,13 @@ case class TransformApi() {
   }
 
   def updateTransform(transformConfig: TransformUpdateConfig, index: String, port: String): Unit = {
-    val json = prepareJsonToUpdateConfig(transformConfig)
+    val json = transformConfig
+      .asJson
+      .dropNullValues
+      .mapObject(_.mapValues(_.dropNullValues))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .noSpaces
     val request = HttpRequest(
       method = HttpMethods.POST,
       uri = s"$port/_transform/$index/_update?pretty",
@@ -77,57 +95,4 @@ case class TransformApi() {
     Response().getResponseFromRequest(request)
   }
 
-
-  private def prepareJsonToConfig(transformConfig: TransformConfig): String = {
-    if (transformConfig.source.query.isDefined) {
-      val correctQuery = transformConfig.source.query.get
-      transformConfig.source.query = Some("queryToChange")
-      val json = transformConfig
-        .asJson
-        .dropNullValues
-        .mapObject(_.mapValues(_.dropNullValues))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
-        .toString()
-        .replaceAll("\"queryToChange\"", correctQuery)
-      println(json)
-      json
-    }
-    else {
-      val json = transformConfig
-        .asJson
-        .dropNullValues
-        .mapObject(_.mapValues(_.dropNullValues))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
-        .noSpaces
-      json
-    }
-  }
-
-  private def prepareJsonToUpdateConfig(transformConfig: TransformUpdateConfig): String = {
-    if (transformConfig.source.query.isDefined) {
-      val correctQuery = transformConfig.source.query.get
-      transformConfig.source.query = Some("queryToChange")
-      val json = transformConfig
-        .asJson
-        .dropNullValues
-        .mapObject(_.mapValues(_.dropNullValues))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
-        .toString()
-        .replaceAll("\"queryToChange\"", correctQuery)
-      json
-    }
-    else {
-      val json = transformConfig
-        .asJson
-        .dropNullValues
-        .mapObject(_.mapValues(_.dropNullValues))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
-        .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
-        .noSpaces
-      json
-    }
-  }
 }

@@ -1,3 +1,5 @@
+import com.sksamuel.elastic4s.requests.searches.queries.BoolQuery
+import com.sksamuel.elastic4s.requests.searches.queries.term.TermQuery
 import transformsapi.transformsproperties.pivotproperties.{Aggregations, GroupBy, Sum, Terms, ValueCount}
 import transformsapi.transformsproperties.syncproperties.Time
 import transformsapi.transformsproperties.{Dest, Pivot, Source, Sync}
@@ -18,8 +20,13 @@ object MainTransform extends App {
       }"""
   }
 
+  val query = BoolQuery(
+    filters = List(TermQuery("Canceled", false))
+  )
+
   val transformConfig = TransformConfig("transform1",
-    source = Source("kibana_sample_data_flights",Some(exampleQuery)),
+//    source = Source("kibana_sample_data_flights",Some(exampleQuery)),
+    source = new Source("kibana_sample_data_flights",query),
     dest = Dest("transform_1"),
     pivot =  Pivot(
       Map("carrier" -> GroupBy(terms = Some(Terms("OriginCityName")))),
@@ -32,7 +39,7 @@ object MainTransform extends App {
   )
 
   val transformUpdateConfig = TransformUpdateConfig(
-    source = Source("kibana_sample_data_flights"/*, Some(exampleQuery)*/),
+    source = new Source("kibana_sample_data_flights",query),
     dest = Dest("transform_1"),
     description = Some("Transform Test"),
     frequency = Some("15m"),
@@ -43,10 +50,10 @@ object MainTransform extends App {
 //  TransformApi().postTransform(transformConfig,port)
 
   /** 2. Tworzenie transformacji */
- // TransformApi().putTransform(transformConfig,id,port)
+//  TransformApi().putTransform(transformConfig,id,port)
 
   /** 2. Update transformacji */
-//  TransformApi().updateTransform(transformUpdateConfig,id,port)
+  TransformApi().updateTransform(transformUpdateConfig,id,port)
 
   /** 3. Startowanie transformacji */
 //  TransformApi().startTransform(id,port)
