@@ -46,24 +46,24 @@ object MainTransform extends App {
   TransformApi().postTransform(transformConfig,port)
 
   /** 2. Tworzenie transformacji */
-//  TransformApi().putTransform(transformConfig,id,port)
+  TransformApi().putTransform(transformConfig,id,port)
 
   /** 2. Update transformacji */
-//  TransformApi().updateTransform(transformUpdateConfig,id,port)
+  TransformApi().updateTransform(transformUpdateConfig,id,port)
 
   /** 3. Startowanie transformacji */
-//  TransformApi().startTransform(id,port)
+  TransformApi().startTransform(id,port)
 
   /** 4. Zatrzymanie transformacji */
-//  TransformApi().stopTransform(id,port)
+  TransformApi().stopTransform(id,port)
 
   /** 5. Usunięcie transformacji */
-//  TransformApi().deleteTransform(id,port)
+  TransformApi().deleteTransform(id,port)
 
   /** 6. Informacje o transformacji */
-//  TransformApi().getTransform(id,port)
+  TransformApi().getTransform(id,port)
 
   /** 7. Statystyki o transformacji */
-//  TransformApi().getTransformStatistics(id,port)
+  TransformApi().getTransformStatistics(id,port)
 
 }

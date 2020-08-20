@@ -23,23 +23,23 @@ object MainRollup extends App {
   RollupApi().putRollUpJob(rollupConfig, id, port)
 
   /** 2. Startowanie rollup-u */
-  //RollupApi().startRollupJob(id, port)
+  RollupApi().startRollupJob(id, port)
 
   /** 3. Zatrzymanie rollup-u */
-  //RollupApi().stopRollupJob(id, port)
+  RollupApi().stopRollupJob(id, port)
 
   /** 4. Usunięcie rollup-u */
-//  RollupApi().deleteRollupJob(id, port)
-//  deleteIndex("rollup1_index")
+  RollupApi().deleteRollupJob(id, port)
+  deleteIndex("rollup1_index")
 
   /** 5. Szczegóły rollup-u  */
-  //RollupApi().getRollupJobDetails(id, port)
+  RollupApi().getRollupJobDetails(id, port)
 
   /** 6. Informacje o możliwościach indexu */
-  //RollupApi().getRollupIndexCapabilities("rollup1_index", port)
+  RollupApi().getRollupIndexCapabilities("rollup1_index", port)
 
-  /** 7. Informacje o danych rollup-u */
-  //  //RollupApi().searchRollupData("rollup1_index", RollupRequestBody().rollupSearch1)
+//  /** 7. Informacje o danych rollup-u */
+//  RollupApi().searchRollupData("rollup1_index", RollupRequestBody().rollupSearch1)
 
 
   def deleteIndex(index: String) {
