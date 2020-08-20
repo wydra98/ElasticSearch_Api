@@ -14,6 +14,7 @@ case class TransformApi() {
       .mapObject(_.mapValues(_.dropNullValues))
       .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
       .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))))
       .noSpaces
       val request = HttpRequest(
         method = HttpMethods.POST,
@@ -30,6 +31,7 @@ case class TransformApi() {
       .mapObject(_.mapValues(_.dropNullValues))
       .mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))
       .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))
+      .mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.mapObject(_.mapValues(_.dropNullValues))))))))
       .noSpaces
     val request = HttpRequest(
       method = HttpMethods.PUT,

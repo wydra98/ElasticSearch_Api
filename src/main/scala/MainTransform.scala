@@ -1,10 +1,11 @@
 import com.sksamuel.elastic4s.requests.searches.queries.BoolQuery
 import com.sksamuel.elastic4s.requests.searches.queries.term.TermQuery
-import transformsapi.transformsproperties.pivotproperties.{Aggregations, GroupBy, Sum, Terms, ValueCount}
+import transformsapi.transformsproperties.pivotproperties.{Aggregations, BucketScript, GroupBy, Sum, Terms, ValueCount}
 import transformsapi.transformsproperties.syncproperties.Time
 import transformsapi.transformsproperties.{Dest, Pivot, Source, Sync}
 import transformsapi.{TransformApi, TransformConfig, TransformUpdateConfig}
-
+//import io.circe.generic.auto._
+//import io.circe.syntax._
 
 object MainTransform extends App {
 
@@ -22,8 +23,13 @@ object MainTransform extends App {
       Map("carrier" -> GroupBy(terms = Some(Terms("OriginCityName")))),
       Map("flights_count" -> Aggregations(value_count = Some(ValueCount("FlightNum"))),
         "delay_mins_total" -> Aggregations(sum = Some(Sum("FlightDelayMin"))),
-        "flight_mins_total" -> Aggregations(sum = Some(Sum("FlightTimeMin")))
-      )),
+        "flight_mins_total" -> Aggregations(sum = Some(Sum("FlightTimeMin"))),
+        "delay_time_percentage:" -> Aggregations(bucket_script = Some(BucketScript(
+          Map("delay_time" -> "delay_mins_total.value",
+          "flight_time" -> "flight_mins_total.value"),
+          "(params.delay_time / params.flight_time) * 100")))
+        )
+    ),
     frequency = Some("5m"),
     sync = Some(Sync(Time("timestamp", Some("60s"))))
   )
